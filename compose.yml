@@ -1,0 +1,67 @@
+---
+services:
+  unifi-network-application:
+    image: lscr.io/linuxserver/unifi-network-application:latest
+    container_name: unifi-network-application
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Prague
+      - MONGO_USER=unifi
+      - MONGO_PASS=${MONGO_PASSWORD}
+      - MONGO_HOST=unifi-db
+      - MONGO_PORT=27017
+      - MONGO_DBNAME=unifi
+      - MEM_LIMIT=1024 #optional
+      - MEM_STARTUP=1024 #optional
+      - MONGO_TLS= #optional
+      - MONGO_AUTHSOURCE= #optional
+    volumes:
+      - ./data/unifi-network-application/data:/config
+    ports:
+      - 8443:8443
+      - 3478:3478/udp
+      - 10001:10001/udp
+      - 8080:8080
+      - 1900:1900/udp #optional
+      - 8843:8843 #optional
+      - 8880:8880 #optional
+      - 6789:6789 #optional
+      - 5514:5514/udp #optional
+    restart: unless-stopped
+    depends_on:
+      unifi-db:
+        condition: service_healthy
+
+  unifi-db:
+    image: docker.io/mongo:7.0.12-jammy
+    container_name: unifi-db
+    environment:
+      - MONGO_DBNAME=unifi
+      - MONGO_USER=unifi
+      - MONGO_PASS=${MONGO_PASSWORD}
+    volumes:
+      - ./data/mongo/db:/data/db
+      - ./init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
+    restart: unless-stopped
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
+
+  ## Note: Uncomment for dbgate - web based database manager to access the unifi database
+  # dbgate:
+  #   image: dbgate/dbgate:5.3.1-alpine
+  #   restart: unless-stopped
+  #   ports:
+  #     - 8444:3000
+  #   volumes:
+  #     - ./data/dbgate-data:/root/.dbgate
+  #   depends_on:
+  #     unifi-db:
+  #       condition: service_healthy
+  #   environment:
+  #     CONNECTIONS: mongo
+  #     LABEL_mongo: MongoDB
+  #     URL_mongo: mongodb://unifi-db:27017
+  #     ENGINE_mongo: mongo@dbgate-plugin-mongo
+  #     USER_mongo: unifi
+  #     PASSWORD_mongo: ${MONGO_PASSWORD}
