@@ -38,6 +38,20 @@ The `compose.yml` file contains the configuration for the Unifi Network Applicat
 
 The `unifi-network-application` service is responsible for running the Unifi Network Application. It is based on the [`linuxserver/unifi-network-application`](https://github.com/linuxserver/docker-unifi-network-application) Docker image.
 
+## Device Adoption
+
+To adopt other devices, such as an Access Point, in Unifi, you need to change the inform IP address. By default, Unifi runs inside Docker using an IP address that is not accessible by other devices. Follow these steps to change the inform IP address:
+
+1. Go to Settings > System > Advanced in the Unifi Network Application.
+
+2. Set the Inform Host to a hostname or IP address that is accessible by your devices.
+
+3. Check the "Override" checkbox to allow devices to connect to the controller during adoption. Devices use the inform-endpoint during adoption.
+
+Note: If you need to change the port, make sure to change it on both sides and manually update the system.properties file. Otherwise, devices will initially communicate but then break after.
+
+Source: https://hub.docker.com/r/linuxserver/unifi-network-application
+
 ## License
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
