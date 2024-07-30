@@ -40,15 +40,9 @@ The `unifi-network-application` service is responsible for running the Unifi Net
 
 ## Device Adoption
 
-To adopt other devices, such as an Access Point, in Unifi, you need to change the inform IP address. By default, Unifi runs inside Docker using an IP address that is not accessible by other devices. Follow these steps to change the inform IP address:
+For Unifi to adopt other devices, e.g. an Access Point, it is required to change the inform IP address. Because Unifi runs inside Docker by default it uses an IP address not accessible by other devices. To change this go to Settings > System > Advanced and set the Inform Host to a hostname or IP address accessible by your devices. Additionally the checkbox "Override" has to be checked, so that devices can connect to the controller during adoption (devices use the inform-endpoint during adoption).
 
-1. Go to Settings > System > Advanced in the Unifi Network Application.
-
-2. Set the Inform Host to a hostname or IP address that is accessible by your devices.
-
-3. Check the "Override" checkbox to allow devices to connect to the controller during adoption. Devices use the inform-endpoint during adoption.
-
-Note: If you need to change the port, make sure to change it on both sides and manually update the system.properties file. Otherwise, devices will initially communicate but then break after.
+Note that you must use 8080:8080. If you MUST change the port, it must be changed on both sides and manually changed in your system.properties file. Otherwise, devices will initially communicate and then break after.
 
 Source: https://hub.docker.com/r/linuxserver/unifi-network-application
 
