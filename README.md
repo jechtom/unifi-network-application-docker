@@ -1,3 +1,11 @@
+# WARNING: Problems with Unifi Network Application in Docker
+
+Using the UniFi Network Application from Docker caused some issues with the UniFi AP7 Pro. After some time (ranging from a few hours to a few days), the access points lost the ability to respond to pings, connect via SSH, and appeared offline. Restarting the access points temporarily resolved the issue. Despite this, clients could still connect to Wi-Fi without any problems. I suspect this might be related to my host machine and Docker engine not running continuously, but I'm not sure.
+
+When using the online cloud management (paid), there were no issues. After a few days, the access points appeared online without any problems.
+
+Now, I am trying to use the UniFi Network Server installed on a host machine instead.
+
 # Unifi Network Application Docker
 
 This project allows you to run the Unifi Network Application locally. All data is stored in the "data" folder and can be transferred to another machine.
